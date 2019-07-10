@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Serial port setup">
+
+    <!--列表选择项-->
+    <ListPreference
+        android:key="DEVICE"
+        android:persistent="true"
+        android:title="Device"/>
+    <!--key：preference的key唯一标识-->
+    <!--persistent:是否将preference保存到sharedpreference中-->
+
+    <ListPreference
+        android:entries="@array/baudrates_name"
+        android:entryValues="@array/baudrates_value"
+        android:key="BAUDRATE"
+        android:persistent="true"
+        android:title="Baud rate"/>
+    <!--entries：显示列表-->
+    <!--entryValues：当列表被选中需要保存的数值列表（一般为数字）-->
+
+</PreferenceScreen>
