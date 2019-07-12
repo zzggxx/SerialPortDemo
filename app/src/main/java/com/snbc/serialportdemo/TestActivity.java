@@ -1,11 +1,10 @@
 package com.snbc.serialportdemo;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +35,47 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     };
+    private ReadThread mReadThread;
+
+    private class ReadThread extends Thread {
+
+        @Override
+        public void run() {
+            super.run();
+            while (!isInterrupted()) {
+                int size;
+                try {
+                    byte[] buffer = new byte[64];
+                    if (mInputStream == null) return;
+                    size = mInputStream.read(buffer);
+                    if (size > 0) {
+                        onDataReceived(buffer, size);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+        }
+    }
+
+    private void onDataReceived(final byte[] buffer, final int size) {
+//        Message message = mHandler.obtainMessage();
+//        message.what = 0;
+//        message.obj = buffer.toString();
+//        mHandler.handleMessage(message);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String s1 = new String(buffer, 0, size);
+                mReceiveMsgTv.setText(s1);
+//                String s = buffer.toString();
+//                mStringBuffer.append(s);
+//                mReceiveMsgTv.setText(mStringBuffer);
+
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +91,8 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         mOutputStream = SerialPortHelp.mOutputStream;
         mInputStream = SerialPortHelp.mInputStream;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                readData();
-            }
-        }).start();
+        mReadThread = new ReadThread();
+        mReadThread.start();
     }
 
     @Override
@@ -77,34 +113,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 break;
-        }
-    }
-
-    public void readData() {
-
-        String readData = null;
-
-        while (true) {
-            try {
-                if (mInputStream != null) {
-                    byte[] buffer = new byte[4];
-                    int size = mInputStream.read(buffer);
-                    if (size > 0) {
-                        readData = buffer.toString();
-                        Log.i(TAG, "readData: " + readData);
-                        mHandler.obtainMessage(0, readData);
-                    } else {
-                        try {
-                            Thread.sleep(200);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                readData();
-            }
         }
     }
 
