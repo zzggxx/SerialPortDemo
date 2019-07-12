@@ -3,12 +3,12 @@ package com.snbc.serialportdemo;
 import android.app.Application;
 import android.content.SharedPreferences;
 
-import com.snbc.serialportdemo.android_serialport_api.SerialPort;
-import com.snbc.serialportdemo.android_serialport_api.SerialPortFinder;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+
+import android_serialport_api.SerialPort;
+import android_serialport_api.SerialPortFinder;
 
 /**
  * author: zhougaoxiong

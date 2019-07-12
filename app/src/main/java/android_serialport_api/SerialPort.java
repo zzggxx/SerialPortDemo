@@ -14,7 +14,7 @@
  * limitations under the License. 
  */
 
-package com.snbc.serialportdemo.android_serialport_api;
+package android_serialport_api;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -78,8 +78,10 @@ public class SerialPort {
 
 	// JNI
 	private native static FileDescriptor open(String path, int baudrate, int flags);
+
 	public native void close();
+
 	static {
-		System.loadLibrary("serial_port");
+		System.loadLibrary("SerialPort");
 	}
 }
