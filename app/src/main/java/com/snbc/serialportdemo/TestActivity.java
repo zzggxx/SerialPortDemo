@@ -46,15 +46,17 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 int size;
                 try {
                     byte[] buffer = new byte[64];
-                    if (mInputStream == null) return;
+                    if (mInputStream == null) {
+                        return;
+                    }
                     size = mInputStream.read(buffer);
                     if (size > 0) {
                         onDataReceived(buffer, size);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return;
                 }
+//                break;
             }
         }
     }
